@@ -12,12 +12,24 @@ const Index = () => {
   };
 
   const predictEarthquakes = () => {
-    // Dummy prediction function - in real application, use a proper algorithm
     const dataLines = earthquakeData.trim().split("\n");
-    const futureEarthquakes = dataLines.map((line, index) => {
+    if (dataLines.length === 0 || !dataLines[0]) {
+      toast({
+        title: "エラー",
+        description: "有効な地震データを入力してください。",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    const lastLine = dataLines[dataLines.length - 1];
+    const lastIntensity = parseInt(lastLine.split(", ")[1]);
+    const futureEarthquakes = dataLines.map((_, index) => {
       const date = new Date();
-      date.setDate(date.getDate() + (index + 1) * 10); // Dummy prediction: Earthquakes every 10 days
-      return `予測: ${date.toLocaleDateString()} - 震度 ${Math.floor(Math.random() * 7) + 1}`;
+      date.setDate(date.getDate() + (index + 1) * 10); // Predict earthquakes every 10 days
+      const nextIntensity = ((lastIntensity + index) % 7) + 1; // Increment the seismic intensity for each prediction
+      return `予測: ${date.toLocaleDateString()} - 震度 ${nextIntensity}`;
     });
 
     if (futureEarthquakes.length === 0) {
