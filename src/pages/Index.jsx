@@ -1,8 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Container, FormControl, FormLabel, Heading, Input, List, ListItem, VStack, Text, useToast } from "@chakra-ui/react";
 import { FaCloudSunRain } from "react-icons/fa";
 
+const fetchEarthquakeData = () => {
+  // This function simulates fetching earthquake data from an API.
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const sampleData = "2024/02/25, 4\n2024/02/26, 5\n2024/02/27, 3";
+      resolve(sampleData);
+    }, 1000); // Simulate network request delay
+  });
+};
+
 const Index = () => {
+  useEffect(() => {
+    fetchEarthquakeData().then((data) => {
+      setEarthquakeData(data);
+    });
+  }, []);
   const [earthquakeData, setEarthquakeData] = useState("");
   const [predictions, setPredictions] = useState([]);
   const toast = useToast();
